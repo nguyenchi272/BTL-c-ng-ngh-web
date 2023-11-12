@@ -1,19 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.resolvers = void 0;
-const book_1 = require("./book/resolvers/Query/book");
-const markBookAsRead_1 = require("./book/resolvers/Mutation/markBookAsRead");
-const Book_1 = require("./book/resolvers/Book");
+const AuthMutations_1 = require("./auth/resolvers/AuthMutations");
+const auth_1 = require("./auth/resolvers/Mutation/auth");
 const user_1 = require("./user/resolvers/Query/user");
+const UUID_1 = require("./base/resolvers/UUID");
 const User_1 = require("./user/resolvers/User");
 exports.resolvers = {
-    Query: {
-        book: book_1.book,
-        user: user_1.user
-    },
-    Mutation: {
-        markBookAsRead: markBookAsRead_1.markBookAsRead
-    },
-    Book: Book_1.Book,
+    Query: { user: user_1.user },
+    Mutation: { auth: auth_1.auth },
+    AuthMutations: AuthMutations_1.AuthMutations,
+    UUID: UUID_1.UUID,
     User: User_1.User
 };

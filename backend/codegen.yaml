@@ -3,3 +3,5 @@ generates:
   src/schema:
     preset: '@eddeee888/gcg-typescript-resolver-files'
     watchPattern: '**/*.mappers.ts'
+    config:
+    contextType: ./types/context.ts#Context

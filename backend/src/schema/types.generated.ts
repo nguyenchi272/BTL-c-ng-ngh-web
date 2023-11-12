@@ -1,4 +1,5 @@
-import { GraphQLResolveInfo } from 'graphql';
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+import { AuthMutationsMapper } from './auth/schema.mappers';
 export type Maybe<T> = T | null | undefined;
 export type InputMaybe<T> = T | null | undefined;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -9,53 +10,40 @@ export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' |
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string | number; }
+  ID: { input: string; output: string; }
   String: { input: string; output: string; }
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  UUID: { input: any; output: any; }
 };
 
-export type Book = {
-  __typename?: 'Book';
-  author?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
-  isbn: Scalars['String']['output'];
-  title?: Maybe<Scalars['String']['output']>;
+export type AuthMutations = {
+  __typename?: 'AuthMutations';
+  login: Scalars['String']['output'];
+  register: Scalars['String']['output'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  markBookAsRead: Book;
+  auth?: Maybe<AuthMutations>;
 };
 
 
-export type MutationmarkBookAsReadArgs = {
-  id: Scalars['ID']['input'];
+export type MutationauthArgs = {
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
 
 export type Query = {
   __typename?: 'Query';
-  book?: Maybe<Book>;
-  books?: Maybe<Array<Maybe<Book>>>;
-  user?: Maybe<User>;
-};
-
-
-export type QuerybookArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryuserArgs = {
-  id: Scalars['ID']['input'];
+  user: User;
 };
 
 export type User = {
   __typename?: 'User';
-  fullName: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
-  isAdmin: Scalars['Boolean']['output'];
+  email: Scalars['String']['output'];
+  id: Scalars['UUID']['output'];
 };
 
 
@@ -129,55 +117,55 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  Book: ResolverTypeWrapper<Book>;
+  AuthMutations: ResolverTypeWrapper<AuthMutationsMapper>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
-  ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
+  UUID: ResolverTypeWrapper<Scalars['UUID']['output']>;
   User: ResolverTypeWrapper<User>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  Book: Book;
+  AuthMutations: AuthMutationsMapper;
   String: Scalars['String']['output'];
-  ID: Scalars['ID']['output'];
   Mutation: {};
   Query: {};
+  UUID: Scalars['UUID']['output'];
   User: User;
   Boolean: Scalars['Boolean']['output'];
 };
 
-export type BookResolvers<ContextType = any, ParentType extends ResolversParentTypes['Book'] = ResolversParentTypes['Book']> = {
-  author?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  isbn?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+export type AuthMutationsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuthMutations'] = ResolversParentTypes['AuthMutations']> = {
+  login?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  register?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  markBookAsRead?: Resolver<ResolversTypes['Book'], ParentType, ContextType, RequireFields<MutationmarkBookAsReadArgs, 'id'>>;
+  auth?: Resolver<Maybe<ResolversTypes['AuthMutations']>, ParentType, ContextType, RequireFields<MutationauthArgs, 'email' | 'password'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  book?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<QuerybookArgs, 'id'>>;
-  books?: Resolver<Maybe<Array<Maybe<ResolversTypes['Book']>>>, ParentType, ContextType>;
-  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryuserArgs, 'id'>>;
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
 };
 
+export interface UUIDScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['UUID'], any> {
+  name: 'UUID';
+}
+
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
-  fullName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  isAdmin?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
-  Book?: BookResolvers<ContextType>;
+  AuthMutations?: AuthMutationsResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  UUID?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;
 };
 

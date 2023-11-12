@@ -1,8 +1,8 @@
 extend type Query {
-  user(id: ID!): User
+    user: User!
 }
+
 type User {
-  id: ID!
-  fullName: String!
-  isAdmin: Boolean!
+    id: UUID!
+    email: String!
 }
